@@ -1,9 +1,16 @@
+import hashlib
+import random
+
 from django.template import Library, Node, TemplateSyntaxError
 from django.utils.safestring import mark_safe, SafeText
 
 from ..backends import detect_backend, SoundCloudBackend, VideoBackend
 
 register = Library()
+
+
+def _get_random_id():
+    return hashlib.sha1(unicode(random.random())).hexdigest()
 
 
 @register.tag('video')
@@ -102,7 +109,7 @@ def embed(backend, size='small'):
     params = _embed_get_params(backend, _size)
 
     return mark_safe(
-        '<iframe width="%(width)d" height="%(height)d" '
+        '<iframe id="%(id)s" width="%(width)d" height="%(height)d" '
         'src="%(url)s" frameborder="0" allowfullscreen>'
         '</iframe>' % params
     )
@@ -125,6 +132,7 @@ def _embed_get_size(size):
 
 def _embed_get_params(backend, size):
     params = {
+        'id': _get_random_id(),
         'url': backend.url,
         'width': size[0],
         'height': size[1],
