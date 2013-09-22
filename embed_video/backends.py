@@ -164,7 +164,7 @@ class YoutubeBackend(VideoBackend):
         re.I | re.X
     )
 
-    pattern_url = 'http://www.youtube.com/embed/%s?wmode=opaque'
+    pattern_url = 'http://www.youtube.com/embed/%s?wmode=opaque&enablejsapi=1'
     pattern_thumbnail_url = 'http://img.youtube.com/vi/%s/hqdefault.jpg'
 
     def get_code(self):
